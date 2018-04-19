@@ -1,0 +1,7 @@
+.vagrant/
+log/
+user-data
+config.ign.merged
+*.vmdk
+*.img
+*.kconfig

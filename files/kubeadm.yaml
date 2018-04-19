@@ -1,0 +1,15 @@
+apiVersion: kubeadm.k8s.io/v1alpha1
+kind: MasterConfiguration
+api:
+  advertiseAddress: 10.255.34.101
+networking:
+  podSubnet: 10.255.100.0/22
+  serviceSubnet: 10.255.200.0/22
+apiServerCertSANs:
+- 127.0.0.1
+- 10.255.34.101
+apiServerExtraArgs:
+  runtime-config: "api/all=true"
+  endpoint-reconciler-type: lease
+featureGates:
+  CoreDNS: true

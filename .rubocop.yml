@@ -1,0 +1,11 @@
+AllCops:
+  TargetRubyVersion: 2.2
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
