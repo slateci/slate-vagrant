@@ -35,8 +35,7 @@ $vm_ip_prefix = '10.255.34'
 $vb_cpuexecutioncap = 100
 $vagrant_share = true
 $files_dest_dir = '/opt/files'
-# adds an ephemeral disk for /scratch, in GBytes
-$slate_ephemeral = 'true'
+$slate_ephemeral = true
 $slate_ephemeral_size = 50
 
 Vagrant.configure('2') do |config|
@@ -66,7 +65,7 @@ Vagrant.configure('2') do |config|
 
       # roughly taken from http://zacklalanne.me/using-vagrant-to-virtualize-multiple-hard-drives/
       cfg.vm.provider :virtualbox do |vbox|
-        if $slate_ephemeral
+        if $slate_ephemeral 
           dataDisk= './dataDisk.vdi'
           if not File.exists?(dataDisk)
             vbox.customize ['createhd', '--filename', dataDisk, '--variant', 'Fixed', '--size', $slate_ephemeral_size * 1024]
