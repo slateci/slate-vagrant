@@ -35,6 +35,9 @@ $vm_ip_prefix = '10.255.34'
 $vb_cpuexecutioncap = 100
 $vagrant_share = true
 $files_dest_dir = '/opt/files'
+# adds an ephemeral disk for /scratch, in GBytes
+$slate_ephemeral = 'true'
+$slate_ephemeral_size = 50
 
 Vagrant.configure('2') do |config|
   config.vbguest.auto_update = false if Vagrant.has_plugin?('vagrant-vbguest')
@@ -58,6 +61,19 @@ Vagrant.configure('2') do |config|
         cfg.vm.provider :virtualbox do |vbox|
           vbox.customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
           vbox.customize ['modifyvm', :id, '--uartmode1', serial_file]
+        end
+      end
+
+      # roughly taken from http://zacklalanne.me/using-vagrant-to-virtualize-multiple-hard-drives/
+      cfg.vm.provider :virtualbox do |vbox|
+        if $slate_ephemeral
+          dataDisk= './dataDisk.vdi'
+          if not File.exists?(dataDisk)
+            vbox.customize ['createhd', '--filename', dataDisk, '--variant', 'Fixed', '--size', $slate_ephemeral_size * 1024]
+            # Adding a SATA controller that allows 4 hard drives
+            vbox.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata', '--portcount', 4]
+            vbox.customize ['storageattach', :id,  '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', dataDisk]
+          end
         end
       end
 
