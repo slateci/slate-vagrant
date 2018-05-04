@@ -37,6 +37,12 @@
     "files": [
       {
         "filesystem": "root",
+        "path": "/opt/scripts/make-scratch.sh",
+        "mode": 755,
+        "contents": { "source": "data:application/x-shellscript;base64,IyEvYmluL2Jhc2gKCmVjaG8gInB1cmdpbmcgb2xkIG1kcmFpZCBkZXZpY2VzLi4uIgptZGFkbSAtLXN0b3AgL2Rldi9tZCo7IG1kYWRtIC0tcmVtb3ZlIC9kZXYvbWQqIDI+L2Rldi9udWxsCgojIGRldGVybWluZSBzdWl0YWJsZSBkZXZpY2VzCkRFVklDRVM9KCkKZm9yIGkgaW4gJChsc2JsayAtbyBOQU1FfCBncmVwIF5zZCk7IGRvCiAgIyBjaGVjayBmb3IgdGhlIGRldmljZSBpbiBtdGFiCiAgZ3JlcCAkaSAvZXRjL210YWIgPiAvZGV2L251bGwKICBpZiBbWyAkPyAtZXEgMCBdXTsgdGhlbgogICAgZWNobyAiZGV2aWNlICRpIGluIC9ldGMvbXRhYi4gc2tpcHBpbmcuLi4iCiAgICBjb250aW51ZQogIGZpCgogICMgY2hlY2sgdGhlIHNpemUgb2YgdGhlIGRldmljZSwgYmFpbCBpZiBpdHMgc21hbGxlciB0aGFuIAogIFNJWkU9JChibG9ja2RldiAtLWdldHNpemU2NCAvZGV2LyRpKQogIGlmIFtbICRTSVpFIC1sdCAnMTA3Mzc0MTgyNDAnIF1dOyB0aGVuCiAgICBlY2hvICJkZXZpY2UgJGkgaXMgbGVzcyB0aGFuIG1pbmltdW0gMTBHQi4gc2tpcHBpbmcuLi4iCiAgICBjb250aW51ZQogIGZpCiAgIyBvdGhlcndpc2UsIGFkZCB0aGUgZGlzawogIERFVklDRVMrPSgkaSkKZG9uZQoKZWNobyAid2lwaW5nIGFuZCBjcmVhdGluZyBSQUlEIGZyb20gZm9sbG93aW5nIGRldmljZXM6ICRERVZJQ0VTIC4uLiIKCmZvciBkZXZpY2UgaW4gJERFVklDRVM7IGRvIAogIGVjaG8gIndpcGluZyBkZXZpY2U6ICRkZXZpY2UgLi4uIgogIHdpcGVmcyAtYSAvZGV2LyRkZXZpY2UKZG9uZQoKIyBob3JyaWJsZSBzaGVsbCBhcnJheSBzdHVmZiBiZSBoZXJlLiAgdGhhbmtzLCBtZHJhaWQhCi91c3Ivc2Jpbi9tZGFkbSAtLWNyZWF0ZSAtLXZlcmJvc2UgL2Rldi9tZDAgLS1sZXZlbD1zdHJpcGUgLS1yYWlkLWRldmljZXM9JHsjREVWSUNFU1tAXX0gJHtERVZJQ0VTW0BdLyMvXC9kZXZcL30gLS1mb3JjZQoKZWNobyAiY3JlYXRpbmcgWEZTIGZpbGVzeXN0ZW0gb24gL2Rldi9tZDAgLi4uIiAKbWtmcy54ZnMgLWYgL2Rldi9tZDAKCm1rZGlyIC1wICIvcnVuL3NsYXRlL2VwaGVtZXJhbCIKbW91bnQgL2Rldi9tZDAgL3J1bi9zbGF0ZS9lcGhlbWVyYWwK" }
+      },
+      {
+        "filesystem": "root",
         "path": "/etc/systemctl.d/nonlocalbind.conf",
         "contents": { "source": "data:,net.ipv4.ip_nonlocal_bind=1"}
       }
@@ -50,6 +56,11 @@
       },
       {
         "name": "update-engine.service",
+        "enabled": true
+      },
+      {
+        "contents": "[Unit]\nDescription=Create ephemeral disk\nAfter=kubelet.service\n[Service]\nType=oneshot\nExecStart=/opt/scripts/make-scratch.sh\n[Install]\nWantedBy=multi-user.target",
+        "name": "create-ephemeral.service",
         "enabled": true
       },
       {
