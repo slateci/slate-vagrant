@@ -98,7 +98,7 @@ Vagrant.configure('2') do |config|
         cfg.vm.synced_folder '.', '/vagrant', id: 'core', nfs: true, mount_options: ['nolock,vers=3,udp']
       end
       cfg.vm.provision 'file', source: FILES_DIR_PATH, destination: '/tmp/files'
-      host_ip = %x(ip route get 1.1.1.1 | grep -oP 'src \\K\\S+').chomp
+      host_ip = `ip route get 1.1.1.1 | awk '{print $7}'`.strip
       cfg.vm.provision 'shell', inline: "sed -i 's/HOST_IP/#{host_ip}/' /tmp/files/kubeadm.yaml", privileged: true
       cfg.vm.provision 'shell', inline: "mv /tmp/files #{$files_dest_dir}", privileged: true
       Dir.entries(SCRIPTS_DIR_PATH).select { |f| !File.directory? f }.sort_by { |f| File.path(f) } .each do |script|
