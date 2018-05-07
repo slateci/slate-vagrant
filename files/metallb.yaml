@@ -220,7 +220,7 @@ spec:
       hostNetwork: true
       containers:
       - name: speaker
-        image: metallb/speaker:v0.5.0
+        image: metallb/speaker:v0.6.2
         imagePullPolicy: Always
         args:
         - --port=7472

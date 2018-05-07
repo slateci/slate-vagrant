@@ -4,4 +4,5 @@ user-data
 config.ign.merged
 *.vmdk
 *.img
+*.vdi
 *.kconfig
