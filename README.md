@@ -31,3 +31,5 @@ The VM configuration can be changed by editing the parameters in the Vagrant fil
 |   `vb_cpuexecutioncap`  |                                                     `100`                                                    |
 |     `vagrant_share`     |                                                    `true`                                                    |
 |     `files_dest_dir`    |                                                  `opt/files`                                                 |
+|     `slate_ephemeral`   |                                                    `true`                                                    |
+| `slate_ephemeral_size`  |                                                     `50`                                                     |
