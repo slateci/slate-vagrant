@@ -3,6 +3,7 @@ log/
 user-data
 config.ign.merged
 *.vmdk
+*.vdi
 *.img
 *.vdi
 *.kconfig
