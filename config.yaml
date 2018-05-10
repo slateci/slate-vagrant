@@ -45,6 +45,8 @@
           WantedBy=multi-user.target
       - name: "docker.service"
         enabled: true
+      - name: "kubelet.service"
+        enabled: true
         contents: |
           [Unit]
           Description=kubelet: The Kubernetes Node Agent
