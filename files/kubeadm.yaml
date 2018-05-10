@@ -8,7 +8,6 @@ networking:
 apiServerCertSANs:
 - 127.0.0.1
 - 10.255.34.101
-- HOST_IP
 apiServerExtraArgs:
   runtime-config: "api/all=true"
   endpoint-reconciler-type: lease

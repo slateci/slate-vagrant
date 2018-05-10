@@ -3,10 +3,11 @@
 set -e
 set -o pipefail
 
-CNI_VERSION="v0.6.0"
-K8S_RELEASE="v1.10.1"
-CFSSL_RELEASE="R1.2"
-CRI_TOOLS_RELEASE="v1.0.0-beta.0"
+# Now passed through vagrant
+# CNI_VERSION="v0.6.0"
+# K8S_RELEASE="v1.10.1"
+# CFSSL_RELEASE="R1.2"
+# CRI_TOOLS_RELEASE="v1.0.0-beta.0"
 
 echo "Fetching..."
 echo "CNI_VERSION: $CNI_VERSION"
