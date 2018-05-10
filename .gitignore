@@ -6,3 +6,4 @@ config.ign.merged
 *.img
 *.vdi
 *.kconfig
+*.vscode

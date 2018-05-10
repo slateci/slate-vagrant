@@ -1,10 +1,6 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
 
-def vagrant_host_ip
-  `ip route get 1.1.1.1 | awk '{print $7}'`.strip
-end
-
 $num_instances = 1
 $coreos_channel = 'beta'
 $instance_name_prefix = 'slate'
@@ -28,7 +24,6 @@ $cri_tools_release = 'v1.0.0-beta.0'
 
 $script_env = {
   FILES_DEST_DIR: $files_dest_dir,
-  VAGRANT_HOST_IP: vagrant_host_ip,
   CNI_VERSION: $cni_version,
   K8S_RELEASE: $k8s_release,
   CFSSL_RELEASE: $cfssl_release,
