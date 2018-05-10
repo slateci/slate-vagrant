@@ -70,8 +70,6 @@ Vagrant.configure('2') do |config|
       end
 
       ip = "#{$vm_ip_prefix}.#{i + 100}"
-      cfg.vm.network :private_network, ip: ip, virtualbox__hostonly: 'vboxnet8'
-      cfg.vm.network :forwarded_port, guest: 6443, host: 6443
       cfg.ignition.ip = "#{ip}/24"
       cfg.ignition.hostname = vm_name
       cfg.ignition.drive_name = 'config' + i.to_s
