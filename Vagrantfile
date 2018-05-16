@@ -74,7 +74,7 @@ Vagrant.configure('2') do |config|
       cfg.ignition.hostname = vm_name
       cfg.ignition.drive_name = 'config' + i.to_s
       cfg.ignition.path = 'config.ign' if File.exist?(IGNITION_CONFIG_PATH)
-
+      cfg.vm.network :private_network, ip: ip, virtualbox__hostonly: 'vboxnet8'
       if $vagrant_share
         cfg.vm.synced_folder '.', '/vagrant', id: 'core', nfs: true, mount_options: ['nolock,vers=3,udp']
       end
