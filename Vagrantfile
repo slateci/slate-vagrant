@@ -47,6 +47,8 @@ Vagrant.configure('2') do |config|
         vbox.check_guest_additions = false
         vbox.functional_vboxsf     = false
         vbox.customize ['modifyvm', :id, '--cpuexecutioncap', $vb_cpuexecutioncap.to_s]
+        vbox.customize ['modifyvm', :id, '--chipset', 'ICH9']
+        vbox.customize ['modifyvm', :id, '--paravirtprovider', 'default']
 
         if $enable_serial_logging
           logdir = File.join(File.dirname(__FILE__), 'log')
