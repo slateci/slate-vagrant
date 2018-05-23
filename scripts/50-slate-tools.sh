@@ -22,5 +22,7 @@ slate-tools helm repo add slate https://raw.githubusercontent.com/slateci/slate-
 slate-tools helm install slate-dev/osg-frontier-squid
 slate-tools kubectl expose deployment osg-frontier-squid-deployment --port=3128 --type=LoadBalancer --name=squid-svc
 # Elasticsearch
-slate-tools helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-slate-tools helm install incubator/elasticsearch
+#slate-tools helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
+#slate-tools helm install incubator/elasticsearch
+# perfSONAR
+slate-tools kubectl create -f https://raw.githubusercontent.com/slateci/slate-deployment/master/perfsonar/perfsonar.yaml
