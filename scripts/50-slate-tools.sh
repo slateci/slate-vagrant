@@ -7,7 +7,11 @@ slate-tools () {
 # Set up container
 wget -q https://raw.githubusercontent.com/slateci/slate-tools/master/slate-tools-container/Dockerfile
 docker build . -t slate-tools
+rm Dockerfile
+bashrc="/home/core/.bashrc"
 docker run -it -d --name slate-tools -v $HOME/.kube/config:/usr/lib/slate-service/etc/kubeconfig slate-tools
+rm $bashrc && cp /usr/share/skel/.bashrc $bashrc
+echo "alias slate-tools='docker exec slate-tools'" >> $bashrc
 # Helm
 slate-tools kubectl create -f https://raw.githubusercontent.com/Azure/helm-charts/master/docs/prerequisities/helm-rbac-config.yaml
 slate-tools helm init --service-account tiller
@@ -26,3 +30,6 @@ slate-tools kubectl expose deployment osg-frontier-squid-deployment --port=3128 
 #slate-tools helm install incubator/elasticsearch
 # perfSONAR
 slate-tools kubectl create -f https://raw.githubusercontent.com/slateci/slate-deployment/master/perfsonar/perfsonar.yaml
+# Dashboard
+slate-tools kubectl apply -f https://raw.githubusercontent.com/slateci/slate-vagrant/slate-tools-docker/files/kubernetes-dashboard.yaml
+slate-tools kubectl expose deployment kubernetes-dashboard --port=443 --target-port=8443 --type=LoadBalancer --name=dashboard-svc
