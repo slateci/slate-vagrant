@@ -18,6 +18,10 @@ slate-tools helm init --service-account tiller
 slate-tools kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system
 # Nginx
 slate-tools kubectl create deployment nginx --image=nginx
+slate-tools kubectl rollout status -w deployment/nginx
+wget -q https://raw.githubusercontent.com/slateci/slate-vagrant/slate-tools-docker/files/index.html
+kubectl cp index.html $(docker exec slate-tools kubectl get pods -l app=nginx | tail -1 | cut -d ' ' -f1):/usr/share/nginx/html/index.html
+rm index.html
 slate-tools kubectl expose deployment nginx --type=LoadBalancer --name=nginx-svc --port 80
 # Slate Catalog
 slate-tools helm repo add slate-dev https://raw.githubusercontent.com/slateci/slate-catalog/master/incubator-repo/
