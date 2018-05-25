@@ -11,6 +11,13 @@ directory to `/opt/files` in the VM and then execute the scripts found in the [`
 The last script to be executed will echo the `kubeconfig` to the console and copy it to `/vagrant/$HOSTNAME.kconfig`
 assuming the `/vagrant` share is mounted.
 
+**Requiremente**
+Make sure you have approximately 20GB hard disk free.
+Download and install the latest [Vagrant](https://www.vagrantup.com/downloads.html).
+Download and install the latest [Docker for Mac](https://docs.docker.com/docker-for-mac/) or [Docker for Linux](https://runnable.com/docker/install-docker-on-linux).
+Download and install the latest [Virtual Box](https://www.virtualbox.org/wiki/Downloads).
+
+**Details**
 If `$vagrant_share = true` (default), the project directory will be mounted to `/vagrant` within the VM via NFS. If
 true Vagrant will ask for your password to modify exports. This is benign and expected.
 
