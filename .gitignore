@@ -1,6 +1,7 @@
 .vagrant/
 log/
 user-data
+config.ign
 config.ign.merged
 *.vmdk
 *.vdi

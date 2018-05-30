@@ -16,7 +16,7 @@ data:
     - name: minikube
       protocol: layer2
       addresses:
-      - 10.255.34.32/27
+      - <%= external_ip_cidr %>
 ---
 # Source: metallb/templates/rbac.yaml
 # Roles
