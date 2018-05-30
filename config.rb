@@ -13,10 +13,9 @@ $vm_cpus = 2
 $vm_ip_prefix = '10.255.34'
 $vb_cpuexecutioncap = 100
 $vagrant_share = false
-$data_disk = true
+$data_disk = false
 $data_disk_name = 'data.vdi'
 $data_disk_size = 50
-$k8s_release = 'v1.10.2'
 
 $kube_config = {
   api_advertise_ip: '10.255.34.101',
@@ -24,6 +23,7 @@ $kube_config = {
   pod_cidr: '10.255.100.0/22',
   service_cidr: '10.255.200.0/22',
   external_ip_cidr: '10.255.34.32/27',
+  data_disk: $data_disk,
   components: {
     kubeadm: {
       url: 'https://storage.googleapis.com/kubernetes-release/release/v1.10.2/bin/linux/amd64/kubeadm',
@@ -46,7 +46,7 @@ $kube_config = {
       checksum: '0fb86549b6a9d17b7c4fdf69586edbea207a4e7885e034ffc73f453dc2df8912562a1d2f173b84388debd94c04127f0e12df65a12a4cba13e9db8807e1522ef1'
     },
     cfssl: {
-      url: 'https://pkg.cfssl.org/R1.2/cfssl_linux-amd64"',
+      url: 'https://pkg.cfssl.org/R1.2/cfssl_linux-amd64',
       checksum: '344d58d43aa3948c78eb7e7dafe493c3409f98c73f27cae041c24a7bd14aff07c702d8ab6cdfb15bd6cc55c18b2552f86c5f79a6778f0c277b5e9798d3a38e37'
     },
     cfssljson: {

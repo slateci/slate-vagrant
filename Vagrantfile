@@ -21,7 +21,7 @@ end
 def render_erb_template(tmplt, dest, b)
   # short circuit return
   return unless File.exist?(tmplt)
-  content = ERB.new(File.read(tmplt)).result(b)
+  content = ERB.new(File.read(tmplt), nil, '-').result(b)
   File.open(dest, 'w') { |f| f.write(content) }
 end
 
