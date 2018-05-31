@@ -3,6 +3,10 @@
 set -e
 set -o pipefail
 
+echo "Installing Prerequisites."
+tar -xvzf /opt/downloads/cni-plugins.tgz -C /opt/cni/bin
+tar -xvzf /opt/downloads/crictl.tgz -C /opt/bin
+
 echo "Initializing Kubernetes."
 kubeadm init --config=/opt/config/kubeadm.yaml
 

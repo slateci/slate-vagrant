@@ -15,14 +15,14 @@ $vb_cpuexecutioncap = 100
 $vagrant_share = false
 $data_disk = false
 $data_disk_name = 'data.vdi'
-$data_disk_size = 50
+$data_disk_size = 20
 
 $kube_config = {
-  api_advertise_ip: '10.255.34.101',
+  api_advertise_ip: "#{$vm_ip_prefix}.101",
   cluster_dns_ip: '10.255.200.10',
   pod_cidr: '10.255.100.0/22',
   service_cidr: '10.255.200.0/22',
-  external_ip_cidr: '10.255.34.32/27',
+  external_ip_cidr: "#{$vm_ip_prefix}.32/27",
   data_disk: $data_disk,
   components: {
     kubeadm: {
@@ -41,7 +41,7 @@ $kube_config = {
       url: 'https://github.com/containernetworking/plugins/releases/download/v0.6.0/cni-plugins-amd64-v0.6.0.tgz',
       checksum: '398afcb1bdac39b3c5113ef6e114b887827a3600a227cd5cef7d36eaea397670520f35b221907490ad78af81049629a321816ce834318749ef7e75d2ab12a5c4'
     },
-    cri_tools: {
+    crictl: {
       url: 'https://github.com/kubernetes-incubator/cri-tools/releases/download/v1.0.0-beta.1/crictl-v1.0.0-beta.1-linux-amd64.tar.gz',
       checksum: '0fb86549b6a9d17b7c4fdf69586edbea207a4e7885e034ffc73f453dc2df8912562a1d2f173b84388debd94c04127f0e12df65a12a4cba13e9db8807e1522ef1'
     },

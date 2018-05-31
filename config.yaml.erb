@@ -82,26 +82,26 @@
               hash:
                 function: sha512
                 sum: <%= components[:cni_plugins][:checksum] %>
-      - path: /opt/downloads/cri_tools.tgz
+      - path: /opt/downloads/crictl.tgz
         filesystem: root
         mode: 493
         contents:
           remote:
-            url: <%= components[:cri_tools][:url] %>
+            url: <%= components[:crictl][:url] %>
             verification:
               hash:
                 function: sha512
-                sum: <%= components[:cri_tools][:checksum] %>
+                sum: <%= components[:crictl][:checksum] %>
       - path: /opt/scripts/make-scratch.sh
         filesystem: root
         mode: 493
         contents: 
           local: make-scratch.sh
-      - path: /opt/scripts/kube-install.sh
+      - path: /opt/scripts/kube-ctrlpln-install.sh
         filesystem: root
         mode: 493
         contents:
-          local: kube-cp-install.sh
+          local: kube-ctrlpln-install.sh
       - path: /opt/config/calico.yaml
         filesystem: root
         mode: 420
@@ -145,7 +145,7 @@
           [Service]
           Type=oneshot
           Environment="PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/opt/bin"
-          ExecStart=/opt/scripts/kube-install.sh
+          ExecStart=/opt/scripts/kube-ctrlpln-install.sh
 <%- if :data_disk == true %>
       - name: create-ephemeral.service
         enabled: true
