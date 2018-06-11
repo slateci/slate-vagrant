@@ -1,0 +1,194 @@
+  storage:
+    directories:
+      - path: /opt/bin
+        filesystem: root
+        mode: 493
+      - path: /opt/cni/bin
+        filesystem: root
+        mode: 493
+      - path: /etc/kubernetes/pki/etcd
+        filesystem: root
+        mode: 493 
+      - path: /etc/kubernetes/pki/calico
+        filesystem: root
+        mode: 493
+      - path: /opt/scripts
+        filesystem: root
+        mode: 493
+      - path: /opt/config
+        filesystem: root
+        mode: 493
+      - path: /opt/downloads
+        filesystem: root
+        mode: 493
+    files: 
+      - path: /opt/bin/kubeadm
+        filesystem: root
+        mode: 493
+        contents:
+          remote:
+            url: <%= components[:kubeadm][:url] %>
+            verification:
+              hash:
+                function: sha512
+                sum: <%= components[:kubeadm][:checksum] %>
+      - path: /opt/bin/kubelet
+        filesystem: root
+        mode: 493
+        contents:
+          remote:
+            url: <%= components[:kubelet][:url] %>
+            verification:
+              hash:
+                function: sha512
+                sum: <%= components[:kubelet][:checksum] %>
+      - path: /opt/bin/kubectl
+        filesystem: root
+        mode: 493
+        contents:
+          remote:
+            url: <%= components[:kubectl][:url] %>
+            verification:
+              hash:
+                function: sha512
+                sum: <%= components[:kubectl][:checksum] %>
+      - path: /opt/bin/cfssl
+        filesystem: root
+        mode: 493
+        contents:
+          remote:
+            url: <%= components[:cfssl][:url] %>
+            verification:
+              hash:
+                function: sha512
+                sum: <%= components[:cfssl][:checksum] %>
+      - path: /opt/bin/cfssljson
+        filesystem: root
+        mode: 493
+        contents:
+          remote:
+            url: <%= components[:cfssljson][:url] %>
+            verification:
+              hash:
+                function: sha512
+                sum: <%= components[:cfssljson][:checksum] %>
+      - path: /opt/downloads/cni-plugins.tgz
+        filesystem: root
+        mode: 493
+        contents:
+          remote:
+            url: <%= components[:cni_plugins][:url] %>
+            verification:
+              hash:
+                function: sha512
+                sum: <%= components[:cni_plugins][:checksum] %>
+      - path: /opt/downloads/crictl.tgz
+        filesystem: root
+        mode: 493
+        contents:
+          remote:
+            url: <%= components[:crictl][:url] %>
+            verification:
+              hash:
+                function: sha512
+                sum: <%= components[:crictl][:checksum] %>
+      - path: /opt/scripts/make-scratch.sh
+        filesystem: root
+        mode: 493
+        contents: 
+          local: make-scratch.sh
+      - path: /opt/scripts/kube-ctrlpln-install.sh
+        filesystem: root
+        mode: 493
+        contents:
+          local: kube-ctrlpln-install.sh
+      - path: /opt/config/calico.yaml
+        filesystem: root
+        mode: 420
+        contents:
+          local: calico.yaml
+      - path: /opt/config/calico-rbac.yaml
+        filesystem: root
+        mode: 420
+        contents:
+          local: calico-rbac.yaml
+      - path: /opt/config/kubeadm.yaml
+        filesystem: root
+        mode: 420
+        contents:
+          local: kubeadm.yaml
+      - path: /opt/config/metallb.yaml
+        filesystem: root
+        mode: 420
+        contents:
+          local: metallb.yaml
+      - path: /etc/systemctl.d/nonlocalbind.conf
+        filesystem: root
+        mode: 420 
+        contents:
+          inline: net.ipv4.ip_nonlocal_bind=1
+  systemd:
+    units:
+      - name: locksmithd.service
+        mask: true
+      - name: update-engine.service
+        enabled: true
+      - name: kubeadm-install.service
+        enabled: true
+        contents: |
+          [Install]
+           WantedBy=multi-user.target
+          [Unit]
+          Description=Installs Kubernetes via kubeadm
+          Requires=docker.service
+          After=docker.service
+          [Service]
+          Type=oneshot
+          Environment="PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/opt/bin"
+          ExecStart=/opt/scripts/kube-ctrlpln-install.sh
+<%- if :data_disk == true %>
+      - name: create-ephemeral.service
+        enabled: true
+        contents: | 
+          [Unit]
+          Description=Create ephemeral disk
+          After=kubelet.service
+          [Service]
+          Type=oneshot
+          ExecStart=/opt/scripts/make-scratch.sh
+          [Install]
+          WantedBy=multi-user.target
+<% end -%>
+      - name: docker.service
+        enabled: true
+      - name: kubelet.service
+        enabled: true
+        contents: |
+          [Unit]
+          Description=kubelet: The Kubernetes Node Agent
+          Documentation=http://kubernetes.io/docs/
+          [Service]
+          ExecStartPre=/usr/bin/mkdir -p /etc/cni/net.d
+          ExecStartPre=/usr/bin/mkdir -p /opt/cni/bin
+          ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests
+          ExecStartPre=/usr/bin/mkdir -p /var/log/containers
+          ExecStart=/opt/bin/kubelet
+          Restart=always
+          StartLimitInterval=0
+          RestartSec=10
+          [Install]
+          WantedBy=multi-user.target
+        dropins:
+          - name: 10-kubeadm.conf
+            contents: |
+              [Service]
+              Environment="KUBELET_KUBECONFIG_ARGS=--bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf"
+              Environment="KUBELET_SYSTEM_PODS_ARGS=--pod-manifest-path=/etc/kubernetes/manifests --allow-privileged=true --serialize-image-pulls=false"
+              Environment="KUBELET_NETWORK_ARGS=--network-plugin=cni --cni-conf-dir=/etc/cni/net.d --cni-bin-dir=/opt/cni/bin"
+              Environment="KUBELET_DNS_ARGS=--cluster-dns=<%= cluster_dns_ip %> --cluster-domain=cluster.local"
+              Environment="KUBELET_AUTHZ_ARGS=--authorization-mode=Webhook --client-ca-file=/etc/kubernetes/pki/ca.crt"
+              Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"
+              Environment="KUBELET_CADVISOR_ARGS=--cadvisor-port=0"
+              Environment="KUBELET_CERTIFICATE_ARGS=--rotate-certificates=true"
+              ExecStart=
+              ExecStart=/opt/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_SYSTEM_PODS_ARGS $KUBELET_NETWORK_ARGS $KUBELET_DNS_ARGS $KUBELET_AUTHZ_ARGS $KUBELET_CGROUP_ARGS $KUBELET_CADVISOR_ARGS $KUBELET_CERTIFICATE_ARGS $KUBELET_EXTRA_ARGS
