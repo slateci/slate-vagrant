@@ -102,6 +102,11 @@
         mode: 493
         contents:
           local: kube-cp-install.sh
+      - path: /opt/scripts/slate-tools.sh
+        filesystem: root
+        mode: 493
+        contents:
+          local: slate-tools.sh
       - path: /opt/config/calico.yaml
         filesystem: root
         mode: 420
@@ -161,6 +166,18 @@
 <% end -%>
       - name: docker.service
         enabled: true
+      - name: slate-tools.service
+        enabled: true
+        contents: |
+          [Unit]
+          Description=Install slate-tools-docker
+          After=kubelet.service
+          [Service]
+          Type=oneshot
+          WorkingDirectory=/srv
+          ExecStart=/opt/scripts/slate-tools.sh
+          [Install]
+          WantedBy=multi-user.target
       - name: kubelet.service
         enabled: true
         contents: |
