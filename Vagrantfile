@@ -118,6 +118,7 @@ Vagrant.configure('2') do |config|
       cfg.ignition.path = 'config.ign' if File.exist?(RENDERED_IGNITION_CONFIG)
       cfg.vm.network :private_network, ip: ip, virtualbox__hostonly: 'vboxnet8'
       cfg.vm.synced_folder '.', '/vagrant', id: 'core', nfs: true, mount_options: ['nolock,vers=3,udp'] if $vagrant_share
+      cfg.vm.provision 'shell', path: File.join(CWD, 'helpers', 'kube_ready.sh')
     end
   end
 end
