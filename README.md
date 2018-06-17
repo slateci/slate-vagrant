@@ -1,7 +1,7 @@
 # Slate Vagrant
 ---
 
-**Supported Operating Systems:** Linux / OSX
+**Supported Operating Systems:** Linux / OSX / Windows 10
 
 **Virtualization Support:** Virtualbox
 
@@ -21,13 +21,33 @@ ignition directory to generate the `config.ign` ignition config.
 * [CoreOS Config Transpiler](https://github.com/coreos/container-linux-config-transpiler)
 * If enabling the data disk Make sure you have approximately 20GB hard disk free
 
-**Requiremente**
-Make sure you have approximately 20GB hard disk free.
-Download and install the latest [Vagrant](https://www.vagrantup.com/downloads.html).
-Download and install the latest [Docker for Mac](https://docs.docker.com/docker-for-mac/) or [Docker for Linux](https://runnable.com/docker/install-docker-on-linux).
-Download and install the latest [Virtual Box](https://www.virtualbox.org/wiki/Downloads).
+**Windows Users**
 
-**Details**
+The suggested method of installing the dependencies on Windows is using [choco](https://chocolatey.org/), a package manager for Windows.
+
+All dependencies except for the CoreOS Config Transpiler can be installed this way. With that in mind, there are still some complications with the Windows Platform that will be outlined below:
+
+#### Issue: Virtualbox complains about VT-x not being enabled when it is
+The Windows 10 Fall Creators Update enabled HyperV by default. This will prevent Virtualbox from functioning. To resolve this issue, execute the below command in an administrative shell:
+```
+dism.exe /Online /Disable-Feature:Microsoft-Hyper-V
+```
+
+#### Issue: Vagrant throw ruby errors during `vagrnat up`
+(June/2018) Virtualbox 5.2.x, Vagrant and the CoreOS image are problematic. The solution is to use the latest 5.1.x version of virtualbox.
+```
+choco install virtualbox --version 5.1.38
+```
+
+#### Issue: `kubeadm-install.service` fails to run
+There are issues with the line endings in widows (`CRLF` vs `LF`). Git should be installed with this set to leave 'as-is' and commit 'as-is'
+```
+choco install git /NoAutoCrlf
+```
+
+---
+
+## Config Details
 If `$vagrant_share = true` (default), the project directory will be mounted to `/vagrant` within the VM via NFS. If
 true Vagrant will ask for your password to modify exports. This is benign and expected.
 
