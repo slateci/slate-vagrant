@@ -40,9 +40,10 @@ choco install virtualbox --version 5.1.38
 ```
 
 #### Issue: `kubeadm-install.service` fails to run
-There are issues with the line endings in widows (`CRLF` vs `LF`). Git should be installed with this set to leave 'as-is' and commit 'as-is'
+There are issues with the line endings in widows (`CRLF` vs `LF`). Git should be configured with this set to `Checkout as-is, commit Unix-style`.
 ```
-choco install git /NoAutoCrlf
+choco install git
+git config --global core.autocrlf input
 ```
 
 ---
